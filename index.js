@@ -1,3 +1,7 @@
+const express = require('express')
+const app = express()
+const port = 3000
+
 require('dotenv').config()
 
 const Telegraf = require('telegraf')
@@ -14,3 +18,11 @@ bot.use(async (ctx, next) => {
 
 bot.hears('Assalamualaikum', (ctx) => ctx.reply('Waalaikumsalam'))
 bot.launch()
+
+app.get('/', (req, res) => {
+res.send('Hello World!')
+})
+
+app.listen(port, () => {
+console.log(`App listening at port:${port}`)
+})
