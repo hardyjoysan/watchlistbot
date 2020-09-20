@@ -1,11 +1,12 @@
 import Telegraf from 'telegraf';
+import dotenv from 'dotenv';
 
-require('dotenv').config();
+dotenv.config();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
-bot.hears('/start', (ctx) => {
-  ctx.reply('<b><u>Hola Amigo! 😈</u></b> <a href="https://t.me/joinchat/AAAAAFXx-J6srSdMQK9cgg"> Click here to join THE WATCHLIST to use this bot features</a>', { parse_mode:"HTML" });
+bot.command('start', (ctx) => {
+  ctx.reply('<b><u>Hola Amigo! 😈</u></b><a href="https://t.me/joinchat/AAAAAFXx-J6srSdMQK9cgg"> Click here to join THE WATCHLIST to use this bot features</a>', { parse_mode:"HTML" });
 });
 
 bot.on('document', async (ctx) => {
