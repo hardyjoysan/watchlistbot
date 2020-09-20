@@ -1,7 +1,7 @@
 import Telegraf from 'telegraf';
-import dotenv from 'dotenv';
+import { config } from 'dotenv';
 
-dotenv.config();
+config();
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
