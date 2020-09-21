@@ -19,9 +19,15 @@ bot.command('register', async (ctx) => {
 
   await bot.telegram.getChat(username)
     .then(res => {
-      doc = { ...doc, channel_id: res.id, channel_title: res.title}
+      doc = {
+        ...doc, 
+        channel_id: res.id, 
+        channel_title: res.title, 
+        channel_username: res.username
+      }
     })
-    .catch(() => {
+    .catch((error) => {
+      console.log(error.description);
       ctx.reply('Invalid user name provided!');
     });
 
