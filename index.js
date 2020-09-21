@@ -59,8 +59,16 @@ bot.command('register', async (ctx) => {
 });
 
 bot.on('document', async (ctx) => {
-    let document = ctx.update.message.document;
-    await bot.telegram.sendDocument('1013218063', document.file_id, {caption: 'Join @The_Watchlist'});
+  let document = ctx.update.message.document;
+  console.log(document);
+  let caption = '<b>' + document.file_name.slice(0, -4).replace(/[.-]/g, " ").trim() + '\n________________________________________\n<a href="https://t.me/joinchat/AAAAAFXx-J6srSdMQK9cgg">THE WATCHLIST 👀❣🎈 </a></b>';
+
+  await bot.telegram.sendDocument('1013218063', document.file_id, {parse_mode: 'HTML', caption: caption});
 });
+
+// bot.on('document', async (ctx) => {
+//     let document = ctx.update.message.document;
+//     await bot.telegram.sendDocument('1013218063', document.file_id, {caption: 'Join @The_Watchlist'});
+// });
 
 bot.launch();
