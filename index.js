@@ -1,6 +1,7 @@
 import Telegraf from 'telegraf';
 import { config } from 'dotenv';
 import { MongoClient } from 'mongodb';
+import Markup from 'telegraf/markup';
 
 config();
 
@@ -58,17 +59,73 @@ bot.command('register', async (ctx) => {
 
 });
 
-bot.on('document', async (ctx) => {
-  let document = ctx.update.message.document;
-  console.log(document);
-  let caption = '<b>' + document.file_name.slice(0, -4).replace(/[.-]/g, " ").trim() + '\n________________________________________\n<a href="https://t.me/joinchat/AAAAAFXx-J6srSdMQK9cgg">THE WATCHLIST 👀❣🎈 </a></b>';
+// bot.on('document', async (ctx) => {
+//   let document = ctx.update.message.document;
+//   let caption = '<b>' + document.file_name.slice(0, -4).replace(/[.-]/g, " ").trim() + '\n________________________________________\n<a href="https://t.me/joinchat/AAAAAFXx-J6srSdMQK9cgg">THE WATCHLIST 👀❣🎈 </a></b>';
 
-  await bot.telegram.sendDocument('1013218063', document.file_id, {parse_mode: 'HTML', caption: caption});
+//   await bot.telegram.sendDocument('1013218063', document.file_id, {parse_mode: 'HTML', caption: caption});
+// });
+
+bot.on('document', async (ctx) => {
+  let message = ctx.update.message;
+  var user_id = message.from.id;
+
+  const client = new MongoClient(process.env.MONGODB_CONNECT, { useUnifiedTopology: true });
+  
+  (async function (){
+      try {
+        await client.connect();
+        const database = client.db('watchlistbot');
+        const collection = database.collection('channels');
+        let channels = collection.find({user_id: user_id});
+
+        if ((await channels.count()) === 0) {
+          ctx.reply("No channels found!");
+          return false;
+        }
+        var keyboards = [];
+        await channels.forEach(channel => {
+          keyboards.push({
+            text : '@'+channel.channel_username, 
+            callback_data: channel.channel_id
+          });
+        });
+
+        ctx.replyWithDocument(message.document.file_id, Markup
+          .inlineKeyboard(keyboards)
+          .oneTime()
+          .resize()
+          .extra()
+        )
+
+      } catch(error) {
+        return ctx.reply('Technical Error! Try again later.');
+      } finally {
+        await client.close();
+      }
+  }());
 });
 
-// bot.on('document', async (ctx) => {
-//     let document = ctx.update.message.document;
-//     await bot.telegram.sendDocument('1013218063', document.file_id, {caption: 'Join @The_Watchlist'});
-// });
+bot.on('callback_query', async (ctx) => {
+  var channel_id = ctx.update.callback_query.data;  
+  let document = ctx.update.callback_query.message.document;
+  let caption = '<b>' + document.file_name.slice(0, -4).replace(/[.-]/g, " ").trim() + '\n________________________________________\n<a href="https://t.me/joinchat/AAAAAFXx-J6srSdMQK9cgg">THE WATCHLIST 👀❣🎈 </a></b>';
+
+  await bot.telegram.sendDocument(channel_id, document.file_id, {parse_mode: 'HTML', caption: caption})
+  .catch((error) => {
+    if (error.code === 403) {
+      ctx.reply('Error! Please add @The_Watchlist_Bot as Administrator in channel.');
+    }else{
+      ctx.reply(error.description);
+    }
+  });
+
+  let message = ctx.update.callback_query.message;
+  await bot.telegram.deleteMessage(message.chat.id, message.message_id)
+  .catch((error) => {
+    console.log(error.description);
+  });
+
+});
 
 bot.launch();
