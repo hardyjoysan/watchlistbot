@@ -11,6 +11,22 @@ bot.command('start', (ctx) => {
   ctx.reply('<b><u>Hola Amigo! 😈</u></b><a href="https://t.me/joinchat/AAAAAFXx-J6srSdMQK9cgg"> Click here to join THE WATCHLIST to use this bot features</a>', { parse_mode:"HTML" });
 });
 
+// bot.command('copy', async(ctx) => {
+//   let message = ctx.update.message;
+//   if (message) {
+//     let cptxt = message.text.replace('/copy ', '');
+//     await bot.telegram.getChat(cptxt)
+//     .then(res => {
+//       console.log(res);
+//     })
+//     .catch((error) => {
+//       console.log(error.description);
+//       ctx.reply('Invalid user name provided!');
+//     });
+
+//   }
+// })
+
 bot.command('register', async (ctx) => {
   let message = ctx.update.message;
   let offset = message.entities[0].length;
@@ -92,6 +108,7 @@ bot.on('document', async (ctx) => {
         )
 
       } catch(error) {
+        console.log(error);
         return ctx.reply('Technical Error! Try again later.');
       } finally {
         await client.close();
