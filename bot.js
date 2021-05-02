@@ -8,7 +8,7 @@ config();
 const bot = new Telegraf(process.env.BOT_TOKEN);
 
 bot.command('start', (ctx) => {
-  ctx.reply('<b><u>Hola Amigo! 😈</u></b><a href="https://t.me/joinchat/AAAAAFXx-J6srSdMQK9cgg"> Click here to join THE WATCHLIST to use this bot features</a>', { parse_mode:"HTML" });
+  ctx.reply('<b><u>Hola Amigo! 😈</u></b><a href="https://t.me/joinchat/EjpijWMsKuw4MGRl"> Click here to join THE WATCHLIST to use this bot features</a>', { parse_mode:"HTML" });
 });
 
 // bot.command('copy', async(ctx) => {
@@ -119,7 +119,7 @@ bot.on('document', async (ctx) => {
 bot.on('callback_query', async (ctx) => {
   var channel_id = ctx.update.callback_query.data;  
   let document = ctx.update.callback_query.message.document;
-  let caption = '<b>' + document.file_name.slice(0, -4).replace(/[.]/g, " ").trim() + '\n____________________\n<a href="https://t.me/joinchat/TehnX7MHJpBC26u8">THE WATCHLIST 👀❣🎈 </a></b>';
+  let caption = '<b>' + document.file_name.slice(0, -4).replace(/[.]/g, " ").trim() + '\n_________________________\n<a href="https://t.me/joinchat/EjpijWMsKuw4MGRl">THE WATCHLIST 👀❣🎈 </a></b>';
 
   await bot.telegram.sendDocument(channel_id, document.file_id, {parse_mode: 'HTML', caption: caption})
   .catch((error) => {
