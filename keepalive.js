@@ -7,7 +7,7 @@ const baseurl = process.env.BASE_URL;
 
 setInterval(async () => {
 
-    await axios.get(`/test`)
+    await axios.get(`${baseurl}/test`)
     .then(function (response) {
       console.log(response.data);
     })
