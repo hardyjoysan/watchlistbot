@@ -1,7 +1,6 @@
 import express from 'express';
 import { config } from 'dotenv';
 import './bot';
-import './keepalive';
 
 config();
 
@@ -16,7 +15,6 @@ app.get('/', (req, res) => {
 app.get('/test', (req, res) => {
   res.json({ message : 'I\'m Alive!'});
 });
-
 
 app.listen(port, () => {
   console.log(`App listening at ${baseurl}:${port}`)
